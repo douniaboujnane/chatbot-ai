@@ -1,8 +1,8 @@
-const express = require("express")
-const cors = require("cors")
-const bodyParser = require("body-parser")
-const openai = require("openai")
-const dotenv = require("dotenv")
+import express from "express"
+import cors from "cors"
+import bodyParser from "body-parser"
+import openai from "openai"
+import dotenv from "dotenv"
 
 // load environment variables
 dotenv.config()

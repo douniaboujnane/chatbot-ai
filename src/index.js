@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import ReactDOM from "react-dom/client"
 import styled from "styled-components"
-import ChatBox from "./ChatBox"
-import InputBox from "./InputBox"
+import ChatBox from "./ChatBox.js"
+import InputBox from "./InputBox.js"
 
 const Container = styled.div`
   width: 600px;

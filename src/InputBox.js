@@ -12,6 +12,7 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
   flex: 1;
+  margin-right: 10px;
 `
 
 const Button = styled.button`

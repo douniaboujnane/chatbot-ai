@@ -1,26 +1,21 @@
 import express from "express"
 import cors from "cors"
 import bodyParser from "body-parser"
-import openai from "openai"
+import OpenAI from "openai"
 import dotenv from "dotenv"
 
-// load environment variables
 dotenv.config()
 
-// setup express app
 const app = express()
 
-// setup middleware to parse JSON bodies
 app.use(bodyParser.json())
-
-// setup CORS
 app.use(cors())
 
 // setup OpenAI API
-openai.apiKey = process.env.OPENAI_API_KEY
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
-// setup routes
-// index route
 app.get("/", (req, res) => {
   res.send("Welcome to the AI Chatbot API!")
 })
@@ -28,18 +23,24 @@ app.get("/", (req, res) => {
 // chat route
 app.post("/chat", async (req, res) => {
   try {
-    const response = await openai.ChatCompletion.create({
+    const userMessage = req.body.message
+
+    const aiResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
+      //temperature: can be used to control if the AI gives deterministic or random responses
       messages: [
         { role: "system", content: "You are a helpful assistant" },
-        { role: "user", content: req.body.message },
+        { role: "user", content: userMessage },
       ],
     })
 
-    res.json({ message: response.data.choices[0].message.content })
+    console.log("OpenAI API Response:", aiResponse.choices[0].message)
+    res.json({
+      message: aiResponse.choices[0].message.content,
+      role: aiResponse.choices[0].message.role,
+    })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: "An error occurred" })
   }
 })
 

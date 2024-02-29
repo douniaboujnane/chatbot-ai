@@ -12,7 +12,7 @@ const ChatBoxContainer = styled.div`
 
 const MessageContainer = styled.div`
   margin: 10px 0;
-  text-align: ${(props) => (props.sender === "bot" ? "right" : "left")};
+  text-align: ${(props) => (props.role === "assistant" ? "right" : "left")};
 `
 
 const Message = styled.div`
@@ -20,7 +20,7 @@ const Message = styled.div`
   padding: 10px;
   border-radius: 10px;
   background-color: ${(props) =>
-    props.sender === "bot" ? "lightgrey" : "#007bff"};
+    props.role === "assistant" ? "lightgrey" : "#007bff"};
   color: white;
 `
 
@@ -28,8 +28,12 @@ export default function ChatBox({ messages }) {
   return (
     <ChatBoxContainer>
       {messages.map((message, index) => (
-        <MessageContainer key={index} sender={message.sender}>
-          <Message sender={message.sender}>{message.text}</Message>
+        <MessageContainer key={index} role={message.role}>
+          <Message role={message.role}>
+            {Array.isArray(message.content)
+              ? message.content.map((item, idx) => <div key={idx}>{item}</div>)
+              : String(message.content)}
+          </Message>
         </MessageContainer>
       ))}
     </ChatBoxContainer>

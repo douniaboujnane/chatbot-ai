@@ -23,7 +23,7 @@ const Button = styled.button`
   border-radius: 5px;
 `
 
-export default function InputBox({ onMessageSend }) {
+export default function InputBox({ onMessageSend, messages }) {
   const [message, setMessage] = useState("")
 
   const sendMessage = async (event) => {
@@ -32,22 +32,30 @@ export default function InputBox({ onMessageSend }) {
     if (!message) return
 
     onMessageSend({
-      text: message,
-      sender: "user",
+      role: "user",
+      content: message,
     })
 
     // Make API call
     try {
-      setTimeout(() => {
-        onMessageSend({ text: "This is a fake bot response", sender: "bot" })
-      }, 1000)
+      const response = await fetch("http://localhost:1330/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: message }),
+      })
+
+      const data = await response.json()
+      onMessageSend({ content: data.message, role: "assistant" })
 
       setMessage("")
     } catch (error) {
       console.error(error)
-      onMessageSend({ text: "An error occurred", sender: "bot" })
+      onMessageSend({ content: "An error occurred", role: "assistant" })
     }
   }
+
   return (
     <Form onSubmit={sendMessage}>
       <Input

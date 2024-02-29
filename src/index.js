@@ -25,7 +25,7 @@ function App() {
       <Title>Chat with A.I</Title>
       <Container>
         <ChatBox messages={messages} />
-        <InputBox onMessageSend={onMessageSend} />
+        <InputBox onMessageSend={onMessageSend} messages={messages} />
       </Container>
     </div>
   )
